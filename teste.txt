@@ -1,1 +1,1 @@
-Este é o projeto de Programação do Guilherme Folhas e do Guilherme Carvalho. Este projeto vai consistir no desenvolvimento de uma aplicação de compra de bilhetes para a Associação Futebol de Coimbra
+Este é o projeto de Programação III do Guilherme Folhas e do Guilherme Carvalho. Este projeto vai consistir no desenvolvimento de uma aplicação de compra de bilhetes para a Associação Futebol de Coimbra.
