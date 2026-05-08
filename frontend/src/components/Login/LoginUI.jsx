@@ -1,66 +1,72 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import {
-  Box,
-  Button,
   Container,
   Paper,
-  TextField,
   Typography,
+  TextField,
+  Button,
+  Box,
+  Link,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
-function LoginUI() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({ email, password });
-  };
-
+const LoginUI = () => {
   return (
-    <Container maxWidth="xs">
-      <Paper elevation={3} sx={{ mt: 12, p: 4, textAlign: "center" }}>
-        <Typography variant="h5" fontWeight="bold" gutterBottom>
+    <Container
+      maxWidth="xs"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
           Entrar na Área de Cliente
         </Typography>
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" sx={{ mt: 2 }}>
           <TextField
             fullWidth
             label="Email"
-            placeholder="nome@exemplo.com"
             margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            variant="outlined"
           />
 
           <TextField
             fullWidth
             label="Password"
-            placeholder="Sua password"
             type="password"
             margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            variant="outlined"
           />
 
           <Button
             fullWidth
             variant="contained"
-            type="submit"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 2, mb: 2 }}
           >
-            Entrar
+            ENTRAR
           </Button>
 
           <Typography variant="body2">
-            Não tem conta? <Link to="/register">Clique aqui</Link>
+            Não tem conta?{" "}
+            <Link component={RouterLink} to="/register">
+              Clique aqui
+            </Link>
           </Typography>
         </Box>
       </Paper>
     </Container>
   );
-}
+};
 
 export default LoginUI;
