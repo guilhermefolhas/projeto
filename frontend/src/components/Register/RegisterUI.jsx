@@ -37,8 +37,10 @@ const RegisterUI = () => {
           <TextField
             fullWidth
             label="Email"
+            type="email"
             margin="normal"
             variant="outlined"
+            required
           />
 
           <TextField
@@ -47,12 +49,14 @@ const RegisterUI = () => {
             type="password"
             margin="normal"
             variant="outlined"
+            required
           />
 
           <Button
             fullWidth
             variant="contained"
             color="success"
+            type="submit"
             sx={{ mt: 2, mb: 2 }}
           >
             REGISTAR

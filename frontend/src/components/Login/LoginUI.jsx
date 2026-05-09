@@ -37,8 +37,10 @@ const LoginUI = () => {
           <TextField
             fullWidth
             label="Email"
+            type="email"
             margin="normal"
             variant="outlined"
+            required
           />
 
           <TextField
@@ -47,11 +49,13 @@ const LoginUI = () => {
             type="password"
             margin="normal"
             variant="outlined"
+            required
           />
 
           <Button
             fullWidth
             variant="contained"
+            type="submit"
             sx={{ mt: 2, mb: 2 }}
           >
             ENTRAR
