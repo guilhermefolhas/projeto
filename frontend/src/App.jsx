@@ -22,10 +22,11 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/home" element={<Home />} />
 
-        <Route path="/jogos">
-          <Route index element={<Jogos />} />
-          <Route path=":id" element={<JogoDetalhes />} />
-        </Route>
+        <Route path="/jogos" element={<Jogos />} />
+        <Route path="/jogos/:id" element={<JogoDetalhes />} />
+
+        {/* Rota direta para aparecer na Navbar */}
+        <Route path="/jogo-detalhes" element={<JogoDetalhes />} />
 
         <Route path="/meus-bilhetes" element={<MeusBilhetes />} />
         <Route path="/admin" element={<Admin />} />

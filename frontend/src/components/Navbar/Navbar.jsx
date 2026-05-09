@@ -1,3 +1,5 @@
+// src/components/Navbar/Navbar.jsx
+
 import { Link } from "react-router-dom";
 import {
   AppBar,
@@ -10,7 +12,13 @@ import {
 
 function Navbar() {
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#102027" }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        backgroundColor: "#102027",
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+      }}
+    >
       <Toolbar
         sx={{
           minHeight: 80,
@@ -22,7 +30,7 @@ function Navbar() {
           Bilheteira
         </Typography>
 
-        {/* Menu centrado com mais espaço entre os botões */}
+        {/* Menu centrado */}
         <Box
           sx={{
             flexGrow: 1,
@@ -39,6 +47,10 @@ function Navbar() {
             Jogos
           </Button>
 
+          <Button color="inherit" component={Link} to="/jogo-detalhes">
+            Jogo Detalhes
+          </Button>
+
           <Button color="inherit" component={Link} to="/meus-bilhetes">
             Meus Bilhetes
           </Button>
@@ -48,9 +60,10 @@ function Navbar() {
           </Button>
         </Box>
 
-        {/* Utilizador e botão sair */}
+        {/* Avatar */}
         <Avatar sx={{ bgcolor: "#1976d2", mr: 2 }}>G</Avatar>
 
+        {/* Botão Sair */}
         <Button
           variant="contained"
           color="error"
