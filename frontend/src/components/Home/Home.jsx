@@ -20,7 +20,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import heroImg from "../../assets/hero.png";
+import heroImg from "../../assets/afc_image.jpeg";
 
 const MOCK_JOGOS = [
   {
@@ -52,7 +52,11 @@ const MOCK_JOGOS = [
   },
 ];
 
-const MOCK_STATS = { jogos: 24, equipas: 16, estadios: 8 };
+const MOCK_STATS = {
+  jogos: 24,
+  equipas: 16,
+  estadios: 8,
+};
 
 function JogoCard({ jogo, onClick }) {
   const iniciaisEquipa = (nome) =>
@@ -144,14 +148,20 @@ function JogoCard({ jogo, onClick }) {
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-              <CalendarMonthIcon sx={{ fontSize: 16, color: "text.secondary" }} />
+              <CalendarMonthIcon
+                sx={{ fontSize: 16, color: "text.secondary" }}
+              />
 
               <Typography variant="caption" color="text.secondary">
                 {formatarData(jogo.data)}
               </Typography>
 
               <AccessTimeIcon
-                sx={{ fontSize: 16, color: "text.secondary", ml: 1 }}
+                sx={{
+                  fontSize: 16,
+                  color: "text.secondary",
+                  ml: 1,
+                }}
               />
 
               <Typography variant="caption" color="text.secondary">
@@ -160,7 +170,9 @@ function JogoCard({ jogo, onClick }) {
             </Box>
 
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-              <LocationOnIcon sx={{ fontSize: 16, color: "text.secondary" }} />
+              <LocationOnIcon
+                sx={{ fontSize: 16, color: "text.secondary" }}
+              />
 
               <Typography variant="caption" color="text.secondary" noWrap>
                 {jogo.estadio}
@@ -191,11 +203,20 @@ function StatCard({ icon, valor, label }) {
         {icon}
       </Box>
 
-      <Typography variant="h4" fontWeight={800} color="white" lineHeight={1}>
+      <Typography
+        variant="h4"
+        fontWeight={800}
+        color="white"
+        lineHeight={1}
+      >
         {valor}
       </Typography>
 
-      <Typography variant="body2" color="rgba(255,255,255,0.8)" sx={{ mt: 0.6 }}>
+      <Typography
+        variant="body2"
+        color="rgba(255,255,255,0.8)"
+        sx={{ mt: 0.6 }}
+      >
         {label}
       </Typography>
     </Box>
@@ -225,6 +246,7 @@ export default function Home() {
           backgroundImage: `linear-gradient(rgba(10,26,32,0.72), rgba(10,26,32,0.82)), url(${heroImg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -254,7 +276,11 @@ export default function Home() {
             sx={{
               mb: 2,
               lineHeight: 1.1,
-              fontSize: { xs: "2.4rem", sm: "3.2rem", md: "4rem" },
+              fontSize: {
+                xs: "2.4rem",
+                sm: "3.2rem",
+                md: "4rem",
+              },
             }}
           >
             Vive o Jogo.
@@ -273,8 +299,8 @@ export default function Home() {
               lineHeight: 1.6,
             }}
           >
-            Os melhores jogos do campeonato numa única plataforma. Compra o teu
-            bilhete em segundos.
+            Os melhores jogos do campeonato numa única plataforma.
+            Compra o teu bilhete em segundos.
           </Typography>
 
           <Box
@@ -290,7 +316,12 @@ export default function Home() {
               color="secondary"
               size="large"
               onClick={() => navigate("/jogos")}
-              sx={{ px: 4.5, py: 1.4, borderRadius: 2, fontWeight: 700 }}
+              sx={{
+                px: 4.5,
+                py: 1.4,
+                borderRadius: 2,
+                fontWeight: 700,
+              }}
             >
               Ver Jogos
             </Button>
@@ -336,7 +367,10 @@ export default function Home() {
               <StatCard
                 icon={
                   <SportsSoccerIcon
-                    sx={{ color: "secondary.main", fontSize: 28 }}
+                    sx={{
+                      color: "secondary.main",
+                      fontSize: 28,
+                    }}
                   />
                 }
                 valor={stats?.jogos ?? "—"}
@@ -347,7 +381,12 @@ export default function Home() {
             <Grid size={{ xs: 4 }}>
               <StatCard
                 icon={
-                  <GroupsIcon sx={{ color: "secondary.main", fontSize: 28 }} />
+                  <GroupsIcon
+                    sx={{
+                      color: "secondary.main",
+                      fontSize: 28,
+                    }}
+                  />
                 }
                 valor={stats?.equipas ?? "—"}
                 label="Equipas"
@@ -357,7 +396,12 @@ export default function Home() {
             <Grid size={{ xs: 4 }}>
               <StatCard
                 icon={
-                  <StadiumIcon sx={{ color: "secondary.main", fontSize: 28 }} />
+                  <StadiumIcon
+                    sx={{
+                      color: "secondary.main",
+                      fontSize: 28,
+                    }}
+                  />
                 }
                 valor={stats?.estadios ?? "—"}
                 label="Estádios"
@@ -368,16 +412,27 @@ export default function Home() {
       </Box>
 
       {/* PRÓXIMOS JOGOS */}
-      <Box sx={{ py: { xs: 6, md: 8 }, bgcolor: "background.default" }}>
+      <Box
+        sx={{
+          py: { xs: 6, md: 8 },
+          bgcolor: "background.default",
+        }}
+      >
         <Container maxWidth="lg">
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              alignItems: { xs: "flex-start", sm: "center" },
+              alignItems: {
+                xs: "flex-start",
+                sm: "center",
+              },
               gap: 2,
               mb: 4,
-              flexDirection: { xs: "column", sm: "row" },
+              flexDirection: {
+                xs: "column",
+                sm: "row",
+              },
             }}
           >
             <Box>
@@ -389,7 +444,11 @@ export default function Home() {
                 Em destaque
               </Typography>
 
-              <Typography variant="h4" fontWeight={800} color="primary.main">
+              <Typography
+                variant="h4"
+                fontWeight={800}
+                color="primary.main"
+              >
                 Próximos Jogos
               </Typography>
             </Box>
@@ -398,7 +457,10 @@ export default function Home() {
               variant="outlined"
               color="primary"
               onClick={() => navigate("/jogos")}
-              sx={{ borderRadius: 2, fontWeight: 700 }}
+              sx={{
+                borderRadius: 2,
+                fontWeight: 700,
+              }}
             >
               Ver todos
             </Button>
@@ -407,7 +469,10 @@ export default function Home() {
           <Grid container spacing={3}>
             {loading
               ? Array.from({ length: 3 }).map((_, i) => (
-                  <Grid key={i} size={{ xs: 12, sm: 6, md: 4 }}>
+                  <Grid
+                    key={i}
+                    size={{ xs: 12, sm: 6, md: 4 }}
+                  >
                     <Skeleton
                       variant="rounded"
                       height={220}
@@ -416,10 +481,15 @@ export default function Home() {
                   </Grid>
                 ))
               : jogos.map((jogo) => (
-                  <Grid key={jogo.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                  <Grid
+                    key={jogo.id}
+                    size={{ xs: 12, sm: 6, md: 4 }}
+                  >
                     <JogoCard
                       jogo={jogo}
-                      onClick={() => navigate(`/jogos/${jogo.id}`)}
+                      onClick={() =>
+                        navigate(`/jogos/${jogo.id}`)
+                      }
                     />
                   </Grid>
                 ))}

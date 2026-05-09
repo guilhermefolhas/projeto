@@ -9,6 +9,7 @@ import {
   Box,
   Avatar,
 } from "@mui/material";
+import logoAFC from "../../assets/afc_png.png";
 
 function Navbar() {
   return (
@@ -25,10 +26,30 @@ function Navbar() {
           py: 1,
         }}
       >
-        {/* Logo */}
-        <Typography variant="h6" sx={{ mr: 4, fontWeight: "bold" }}>
-          Bilheteira
-        </Typography>
+        {/* Logo + Título */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            mr: 4,
+            gap: 1.5,
+          }}
+        >
+          <Box
+            component="img"
+            src={logoAFC}
+            alt="Logo Associação de Futebol de Coimbra"
+            sx={{
+              width: 48,
+              height: 48,
+              objectFit: "contain",
+            }}
+          />
+
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            Bilheteira
+          </Typography>
+        </Box>
 
         {/* Menu centrado */}
         <Box
