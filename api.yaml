@@ -1,0 +1,939 @@
+openapi: 3.0.4
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  description: |-
+    Isto vai servir como projeto de Programação sobre a venda de bilhetes para a Divisão de Elite da Associação Futebol de Coimbra
+  contact:
+    email: afcoimbra@afcoimbra.com
+  version: 1.0.12
+  
+servers:
+  - url: https://localhost:5000/api/v3
+    description: Servidor local
+
+tags:
+  - name: Auth
+    description: Autenticação de clientes
+  - name: Cliente
+    description: Tudo sobre os clientes
+  - name: Compra
+    description: Tudo sobre compras
+  - name: Jogo
+    description: Tudo sobre os jogos
+  - name: Bilhete
+    description: Tudo sobre os bilhetes
+  - name: Estádio
+    description: Tudo sobre os estádios
+  - name: Equipa
+    description: Tudo sobre as equipas  
+
+paths:
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login de cliente
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  example: email@gmail.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Login bem-sucedido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT de autenticação
+                  cliente:
+                    $ref: '#/components/schemas/Client'
+        '401':
+          description: Credenciais inválidas
+        '500':
+          description: Falha no servidor
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Registo de novo cliente
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '201':
+          description: Cliente registado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Dados inválidos
+        '409':
+          description: Email já registado
+        '500':
+          description: Falha no servidor
+
+  /client:
+    get:
+      tags: [Cliente]
+      summary: Todos os clientes
+      operationId: getAllClients
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+        '500':
+          description: Falha no servidor
+    post:
+      tags: [Cliente]
+      summary: Cria um novo cliente
+      operationId: createClient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '201':
+          description: Cliente criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Dados inválidos
+        '500':
+          description: Falha no servidor
+    put:
+      tags: [Cliente]
+      summary: Atualiza um cliente existente
+      operationId: updateClient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '200':
+          description: Cliente atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Cliente não encontrado
+        '500':
+          description: Falha no servidor
+          
+  /client/{id_cliente}:
+    parameters:
+      - name: id_cliente
+        in: path
+        required: true
+        description: ID do cliente
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags: [Cliente]
+      summary: Encontrar cliente pelo ID
+      operationId: getClientById
+      responses:
+        '200':
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '404':
+          description: Cliente não encontrado
+        '500':
+          description: Falha no servidor
+    put:
+      tags: [Cliente]
+      summary: Atualiza um cliente pelo ID
+      operationId: updateClientById
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '200':
+          description: Cliente atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Cliente não encontrado
+        '500':
+          description: Falha no servidor
+    delete:
+      tags: [Cliente]
+      summary: Apaga um cliente pelo ID
+      operationId: deleteClient
+      responses:
+        '204':
+          description: Cliente eliminado com sucesso
+        '404':
+          description: Cliente não encontrado
+        '500':
+          description: Falha no servidor
+
+  /equipa:
+    get:
+      tags: [Equipa]
+      summary: Todas as equipas
+      operationId: getAllEquipas
+      responses:
+        '200':
+          description: Lista de equipas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Equipa'
+        '500':
+          description: Falha no servidor
+    post:
+      tags: [Equipa]
+      summary: Cria uma nova equipa
+      operationId: createEquipa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipa'
+      responses:
+        '201':
+          description: Equipa criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipa'
+        '400':
+          description: Dados inválidos
+        '500':
+          description: Falha no servidor
+
+  /equipa/{id_equipa}:
+    parameters:
+      - name: id_equipa
+        in: path
+        required: true
+        description: ID da equipa
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags: [Equipa]
+      summary: Encontrar equipa pelo ID
+      operationId: getEquipaById
+      responses:
+        '200':
+          description: Equipa encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipa'
+        '404':
+          description: Equipa não encontrada
+        '500':
+          description: Falha no servidor
+    put:
+      tags: [Equipa]
+      summary: Atualiza uma equipa pelo ID
+      operationId: updateEquipa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipa'
+      responses:
+        '200':
+          description: Equipa atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipa'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Equipa não encontrada
+        '500':
+          description: Falha no servidor
+    delete:
+      tags: [Equipa]
+      summary: Apaga uma equipa pelo ID
+      operationId: deleteEquipa
+      responses:
+        '204':
+          description: Equipa eliminada com sucesso
+        '404':
+          description: Equipa não encontrada
+        '500':
+          description: Falha no servidor
+
+  /estadio:
+    get:
+      tags: [Estádio]
+      summary: Todos os estádios
+      operationId: getAllEstadios
+      responses:
+        '200':
+          description: Lista de estádios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Estadio'
+        '500':
+          description: Falha no servidor
+    post:
+      tags: [Estádio]
+      summary: Cria um novo estádio
+      operationId: createEstadio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estadio'
+      responses:
+        '201':
+          description: Estádio criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estadio'
+        '400':
+          description: Dados inválidos
+        '500':
+          description: Falha no servidor
+
+  /estadio/{id_estadio}:
+    parameters:
+      - name: id_estadio
+        in: path
+        required: true
+        description: ID do estádio
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags: [Estádio]
+      summary: Encontrar estádio pelo ID
+      operationId: getEstadioById
+      responses:
+        '200':
+          description: Estádio encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estadio'
+        '404':
+          description: Estádio não encontrado
+        '500':
+          description: Falha no servidor
+    put:
+      tags: [Estádio]
+      summary: Atualiza um estádio pelo ID
+      operationId: updateEstadio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estadio'
+      responses:
+        '200':
+          description: Estádio atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estadio'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Estádio não encontrado
+        '500':
+          description: Falha no servidor
+    delete:
+      tags: [Estádio]
+      summary: Apaga um estádio pelo ID
+      operationId: deleteEstadio
+      responses:
+        '204':
+          description: Estádio eliminado com sucesso
+        '404':
+          description: Estádio não encontrado
+        '500':
+          description: Falha no servidor
+
+  /jogo:
+    get:
+      tags: [Jogo]
+      summary: Todos os jogos
+      operationId: getAllJogos
+      parameters:
+        - name: jornada
+          in: query
+          required: false
+          description: Filtrar jogos por número de jornada
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de jogos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Jogo'
+        '500':
+          description: Falha no servidor
+    post:
+      tags: [Jogo]
+      summary: Cria um novo jogo
+      operationId: createJogo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Jogo'
+      responses:
+        '201':
+          description: Jogo criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Jogo'
+        '400':
+          description: Dados inválidos
+        '500':
+          description: Falha no servidor
+
+  /jogo/{id_jogo}:
+    parameters:
+      - name: id_jogo
+        in: path
+        required: true
+        description: ID do jogo
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags: [Jogo]
+      summary: Encontrar jogo pelo ID
+      operationId: getJogoById
+      responses:
+        '200':
+          description: Jogo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Jogo'
+        '404':
+          description: Jogo não encontrado
+        '500':
+          description: Falha no servidor
+    put:
+      tags: [Jogo]
+      summary: Atualiza um jogo pelo ID
+      operationId: updateJogo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Jogo'
+      responses:
+        '200':
+          description: Jogo atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Jogo'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Jogo não encontrado
+        '500':
+          description: Falha no servidor
+    delete:
+      tags: [Jogo]
+      summary: Apaga um jogo pelo ID
+      operationId: deleteJogo
+      responses:
+        '204':
+          description: Jogo eliminado com sucesso
+        '404':
+          description: Jogo não encontrado
+        '500':
+          description: Falha no servidor
+
+  /bilhete:
+    get:
+      tags: [Bilhete]
+      summary: Todos os bilhetes
+      operationId: getAllBilhetes
+      parameters:
+        - name: id_jogo
+          in: query
+          required: false
+          description: Filtrar bilhetes por jogo
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de bilhetes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bilhete'
+        '500':
+          description: Falha no servidor
+    post:
+      tags: [Bilhete]
+      summary: Cria um novo bilhete
+      operationId: createBilhete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bilhete'
+      responses:
+        '201':
+          description: Bilhete criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bilhete'
+        '400':
+          description: Dados inválidos
+        '500':
+          description: Falha no servidor
+
+  /bilhete/{id_bilhete}:
+    parameters:
+      - name: id_bilhete
+        in: path
+        required: true
+        description: ID do bilhete
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags: [Bilhete]
+      summary: Encontrar bilhete pelo ID
+      operationId: getBilheteById
+      responses:
+        '200':
+          description: Bilhete encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bilhete'
+        '404':
+          description: Bilhete não encontrado
+        '500':
+          description: Falha no servidor
+    put:
+      tags: [Bilhete]
+      summary: Atualiza um bilhete pelo ID
+      operationId: updateBilhete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bilhete'
+      responses:
+        '200':
+          description: Bilhete atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bilhete'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Bilhete não encontrado
+        '500':
+          description: Falha no servidor
+    delete:
+      tags: [Bilhete]
+      summary: Apaga um bilhete pelo ID
+      operationId: deleteBilhete
+      responses:
+        '204':
+          description: Bilhete eliminado com sucesso
+        '404':
+          description: Bilhete não encontrado
+        '500':
+          description: Falha no servidor
+
+  /compra:
+    get:
+      tags: [Compra]
+      summary: Todas as compras
+      operationId: getAllCompras
+      responses:
+        '200':
+          description: Lista de compras
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Compra'
+        '500':
+          description: Falha no servidor
+    post:
+      tags: [Compra]
+      summary: Efetua uma nova compra
+      operationId: createCompra
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Compra'
+      responses:
+        '201':
+          description: Compra realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Compra'
+        '400':
+          description: Dados inválidos
+        '500':
+          description: Falha no servidor
+
+  /compra/{id_compra}:
+    parameters:
+      - name: id_compra
+        in: path
+        required: true
+        description: ID da compra
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags: [Compra]
+      summary: Encontrar compra pelo ID
+      operationId: getCompraById
+      responses:
+        '200':
+          description: Compra encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Compra'
+        '404':
+          description: Compra não encontrada
+        '500':
+          description: Falha no servidor
+    put:
+      tags: [Compra]
+      summary: Atualiza o estado de uma compra
+      operationId: updateCompra
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                estado:
+                  type: string
+                  enum: [pago, por pagar, cancelado]
+      responses:
+        '200':
+          description: Compra atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Compra'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Compra não encontrada
+        '500':
+          description: Falha no servidor
+    delete:
+      tags: [Compra]
+      summary: Apaga uma compra pelo ID
+      operationId: deleteCompra
+      responses:
+        '204':
+          description: Compra eliminada com sucesso
+        '404':
+          description: Compra não encontrada
+        '500':
+          description: Falha no servidor
+
+  /compra/cliente/{id_cliente}:
+    parameters:
+      - name: id_cliente
+        in: path
+        required: true
+        description: ID do cliente
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags: [Compra]
+      summary: Todas as compras de um cliente específico
+      operationId: getComprasByCliente
+      responses:
+        '200':
+          description: Lista de compras do cliente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Compra'
+        '404':
+          description: Cliente não encontrado
+        '500':
+          description: Falha no servidor
+
+components:
+
+  schemas:
+
+    Client:
+      type: object
+      required:
+        - nome
+        - email
+        - nif
+      properties:
+        id_cliente:
+          type: integer
+          format: int64
+          description: Chave primária da entidade Cliente
+          example: [1]
+        nome:
+          type: string
+          description: Nome completo do Cliente
+          example: [Carlos Silva]
+        email:
+          type: string
+          description: Email do Cliente
+          example: [email@gmail.com]
+        nif:
+          type: integer
+          format: int64
+          description: NIF do Cliente
+          example: [123456789]
+        telemovel:
+          type: integer
+          format: int64
+          description: Telemóvel do Cliente
+          example: [931393191]
+        dta_nascimento:
+          type: string
+          format: date
+          description: Data de nascimento do cliente
+          example: [2002-08-10]
+
+    Equipa:
+      type: object
+      required:
+        - nome
+      properties:
+        id_equipa:
+          type: integer
+          format: int64
+          description: Chave primária da entidade Equipa
+          example: [1]
+        nome:
+          type: string
+          description: Nome completo do Clube
+          example: [Vigor da Mocidade]
+        fundacao:
+          type: string
+          format: date
+          description: Data de fundação do Clube
+          example: [1999-09-09]
+
+    Estadio:
+      type: object 
+      required:
+        - nome
+        - morada
+        - lotacao
+        - preco_base
+      properties:
+        id_estadio:
+          type: integer 
+          format: int64 
+          description: Chave primária da entidade Estádio 
+          example: [1]
+        nome:
+          type: string
+          description: Nome completo do Estádio
+          example: [Campo dos Sardões]
+        morada:
+          type: string 
+          description: Morada do Estádio 
+          example: [Rua da Rua]
+        lotacao:
+          type: integer 
+          format: int64 
+          description: Lotação do Estádio
+          example: [2000]
+        preco_base:
+          type: number
+          format: float
+          description: Preço base do Estádio
+          example: [4,50]
+        id_equipa: 
+          type: array  
+          description: A equipa que está relacionada com o Estádio
+          items: 
+            $ref: '#/components/schemas/Equipa'
+    Jogo: 
+      type: object
+      required:
+        - data
+        - hora
+        - jornada
+        - id_estadio
+        - id_equipa_casa
+        - id_equipa_fora
+      properties: 
+        id_jogo:
+          type: integer
+          format: int64 
+          description: Chave primária da entidade Jogo
+          example: [1]
+        hora:
+          type: string 
+          format: time 
+          description: Hora relativa ao jogo
+          example: [15:00]
+        jornada:
+          type: integer
+          format: int64
+          description: Jornada a que o jogo se vai realizar
+          example: [10]
+        id_estadio:
+          type: array 
+          description: Estádio onde o jogo se vai realizar
+          items: 
+            $ref: '#/components/schemas/Estadio'
+        id_equipa_casa:
+          type: array 
+          description: Equipa que vai jogar em casa 
+          items: 
+            $ref: '#/components/schemas/Equipa' 
+        id_equipa_fora: 
+          type: array 
+          description: Equipa que vai jogar fora 
+          items: 
+            $ref: '#/components/schemas/Equipa'
+
+    Bilhete:
+      type: object
+      required:
+        - custo
+        - id_jogo
+      properties: 
+        id_bilhete:
+          type: integer 
+          format: int64 
+          description: Chave primária da entidade Bilhete 
+          example: [1]
+        custo:
+          type: number
+          format: float
+          description: Custo do bilhete no respetivo jogo
+          example: [4,50]
+        id_jogo: 
+          type: array
+          description: Jogo que vai ocorrer
+          items:
+            $ref: '#/components/schemas/Jogo'
+
+    Compra:
+      type: object
+      required:
+        - id_cliente
+        - id_bilhete
+      properties: 
+        id_compra:
+          type: integer 
+          format: int64
+          description: Chave primária da entidade Compra 
+          example: [1]
+        estado:
+          type: array
+          format: status
+          description: estado em que se encontra a Compra
+          example: [pago,por pagar, cancelado]
+        dta_compra:
+          type: string
+          format: date-time
+          description: Data da compra 
+          example: [1999-09-09 16:50]
+        id_cliente:
+          type: array 
+          description: Cliente que efetivou a compra 
+          items:
+            $ref: '#/components/schemas/Client'
+        id_bilhete:
+          type: array 
+          description: Cliente que efetivou a compra 
+          items:
+            $ref: '#/components/schemas/Bilhete'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+          
