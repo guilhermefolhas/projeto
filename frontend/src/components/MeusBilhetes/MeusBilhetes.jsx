@@ -19,50 +19,41 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import axios from "axios";
+import logoVigor from "../../assets/vigor.png";
+import logoEsperanca from "../../assets/esperanca.jpeg";
+import logoUniao from "../../assets/uniao.jpeg";
+import logoTourizense from "../../assets/tourizense.png";
 
-// ─── Mock data – substituir por chamada à API ─────────────────────────────────
+
 const MOCK_BILHETES = [
   {
     id: 101,
     jogo_id: 1,
-    equipa_casa: "Sporting CP",
-    equipa_fora: "FC Porto",
-    data: "2025-06-14",
-    hora: "21:00",
-    estadio: "Estádio de Alvalade",
-    categoria: "Tribuna Central",
-    quantidade: 2,
-    preco_unit: 55,
-    fase: "Final",
+    equipa_casa: "GR Vigor M",      logo_casa: logoVigor,
+    equipa_fora: "Esperança AC",    logo_fora: logoEsperanca,
+    data: "2025-06-14", hora: "21:00",
+    estadio: "Campo dos Sardões",
+    jornada: 34, quantidade: 2, preco_unit: 4.50,
   },
   {
     id: 102,
     jogo_id: 2,
-    equipa_casa: "SL Benfica",
-    equipa_fora: "SC Braga",
-    data: "2025-06-07",
-    hora: "18:30",
-    estadio: "Estádio da Luz",
-    categoria: "Geral",
-    quantidade: 1,
-    preco_unit: 15,
-    fase: "Meia-Final",
+    equipa_casa: "União 1919",      logo_casa: logoUniao,
+    equipa_fora: "GD Tourizense",   logo_fora: logoTourizense,
+    data: "2025-06-14", hora: "17:00",
+    estadio: "Estádio Municipal Sérgio Conceição",
+    jornada: 34, quantidade: 1, preco_unit: 5.00,
   },
   {
     id: 103,
-    jogo_id: 3,
-    equipa_casa: "FC Porto",
-    equipa_fora: "Vitória SC",
-    data: "2025-03-10", // jogo passado
-    hora: "20:45",
-    estadio: "Estádio do Dragão",
-    categoria: "Bancada Norte",
-    quantidade: 3,
-    preco_unit: 25,
-    fase: "Quartos",
+    jogo_id: 4,
+    equipa_casa: "GD Tourizense",   logo_casa: logoTourizense,
+    equipa_fora: "GR Vigor M",      logo_fora: logoVigor,
+    data: "2025-03-10", hora: "21:00",
+    estadio: "Parque Desportivo Visconde Vinhal",
+    jornada: 33, quantidade: 3, preco_unit: 4.00,
   },
 ];
-// ─────────────────────────────────────────────────────────────────────────────
 
 const iniciaisEquipa = (nome) =>
   nome.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
@@ -77,6 +68,7 @@ const jogoPassou = (dataStr) => new Date(dataStr) < new Date();
 function BilheteCard({ bilhete }) {
   const passado = jogoPassou(bilhete.data);
   const total = (bilhete.preco_unit * bilhete.quantidade).toFixed(2);
+  
 
   return (
     <Card
@@ -100,12 +92,14 @@ function BilheteCard({ bilhete }) {
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
             <Avatar
+              src={bilhete.logo_casa}
               sx={{ bgcolor: "rgba(255,255,255,0.15)", width: 40, height: 40, fontSize: "0.75rem", fontWeight: 700, color: "white" }}
             >
               {iniciaisEquipa(bilhete.equipa_casa)}
             </Avatar>
             <Typography variant="body2" color="white" fontWeight={700}>vs</Typography>
             <Avatar
+              src={bilhete.logo_fora}
               sx={{ bgcolor: "rgba(200,169,81,0.3)", width: 40, height: 40, fontSize: "0.75rem", fontWeight: 700, color: "secondary.light" }}
             >
               {iniciaisEquipa(bilhete.equipa_fora)}
@@ -114,7 +108,7 @@ function BilheteCard({ bilhete }) {
               <Typography variant="body2" color="white" fontWeight={700} noWrap>
                 {bilhete.equipa_casa} vs {bilhete.equipa_fora}
               </Typography>
-              <Typography variant="caption" color="rgba(255,255,255,0.65)">{bilhete.fase}</Typography>
+              <Typography variant="caption" color="rgba(255,255,255,0.65)">Jornada {bilhete.jornada}</Typography>
             </Box>
           </Box>
           <Chip

@@ -20,7 +20,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import heroImg from "../../assets/afc_image.jpeg";
+import heroImg from "../../assets/afc_image.jpg";
 import logoVigor from "../../assets/vigor.png";
 import logoEsperanca from "../../assets/esperanca.jpeg";
 import logoUniao from "../../assets/uniao.jpeg";
@@ -200,11 +200,13 @@ function StatCard({ icon, valor, label }) {
         {icon}
       </Box>
 
-      <Typography variant="h4" fontWeight={800} color="white" lineHeight={1}>
+      <Typography variant="h4" fontWeight={800} lineHeight={1}
+        sx={{ color: "#ffffff" }}
+      >
         {valor}
       </Typography>
 
-      <Typography variant="body2" color="rgba(255,255,255,0.8)" sx={{ mt: 0.6 }}>
+      <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.8)", mt: 0.6 }}>
         {label}
       </Typography>
     </Box>
@@ -357,7 +359,7 @@ export default function Home() {
       </Box>
 
       {/* ESTATÍSTICAS */}
-      <Box sx={{ bgcolor: "primary.main", py: { xs: 3, md: 3.5 } }}>
+      <Box sx={{ bgcolor: "#102027", py: { xs: 3, md: 3.5 } }}>
         <Container maxWidth="md">
           <Grid
             container
@@ -367,7 +369,7 @@ export default function Home() {
           >
             <Grid size={{ xs: 4 }}>
               <StatCard
-                icon={<SportsSoccerIcon sx={{ color: "secondary.main", fontSize: 28 }} />}
+                icon={<SportsSoccerIcon sx={{ color: "white", fontSize: 28 }} />}
                 valor={stats?.jogos ?? "—"}
                 label="Jogos"
               />
@@ -375,7 +377,7 @@ export default function Home() {
 
             <Grid size={{ xs: 4 }}>
               <StatCard
-                icon={<GroupsIcon sx={{ color: "secondary.main", fontSize: 28 }} />}
+                icon={<GroupsIcon sx={{ color: "white", fontSize: 28 }} />}
                 valor={stats?.equipas ?? "—"}
                 label="Equipas"
               />
@@ -383,7 +385,7 @@ export default function Home() {
 
             <Grid size={{ xs: 4 }}>
               <StatCard
-                icon={<StadiumIcon sx={{ color: "secondary.main", fontSize: 28 }} />}
+                icon={<StadiumIcon sx={{ color: "white", fontSize: 28 }} />}
                 valor={stats?.estadios ?? "—"}
                 label="Estádios"
               />
