@@ -47,7 +47,7 @@ function Navbar() {
           />
 
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            Bilheteira
+            Bilheteira AFC
           </Typography>
         </Box>
 

@@ -21,65 +21,73 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import heroImg from "../../assets/afc_image.jpeg";
+import logoVigor from "../../assets/vigor.png";
+import logoEsperanca from "../../assets/esperanca.jpeg";
+import logoUniao from "../../assets/uniao.jpeg";
+import logoTourizense from "../../assets/tourizense.png";
+import logoAcademica from "../../assets/academica.png";
+import logoNogueirense from "../../assets/nogueirense.png";
 
 const MOCK_JOGOS = [
   {
     id: 1,
-    equipa_casa: "Sporting CP",
-    equipa_fora: "FC Porto",
+    equipa_casa: "GR Vigor M",
+    logo_casa: logoVigor,
+    equipa_fora: "Esperança AC",
+    logo_fora: logoEsperanca,
     data: "2025-06-14",
     hora: "21:00",
-    estadio: "Estádio de Alvalade",
-    fase: "Final",
+    estadio: "Campo dos Sardões",
+    jornada: 34,
   },
   {
     id: 2,
-    equipa_casa: "SL Benfica",
-    equipa_fora: "SC Braga",
-    data: "2025-06-07",
-    hora: "18:30",
-    estadio: "Estádio da Luz",
-    fase: "Meia-Final",
+    equipa_casa: "União 1919",
+    logo_casa: logoUniao,
+    equipa_fora: "GD Tourizense",
+    logo_fora: logoTourizense,
+    data: "2025-06-14",
+    hora: "17:00",
+    estadio: "Estádio Municipal Sérgio Conceição",
+    jornada: 34,
   },
   {
     id: 3,
-    equipa_casa: "FC Porto",
-    equipa_fora: "Vitória SC",
-    data: "2025-05-31",
-    hora: "20:45",
-    estadio: "Estádio do Dragão",
-    fase: "Quartos",
+    equipa_casa: "Académica SF",
+    logo_casa: logoAcademica,
+    equipa_fora: "AD Nogueirense",
+    logo_fora: logoNogueirense,
+    data: "2025-06-14",
+    hora: "18:30",
+    estadio: "Estádio Universitário",
+    jornada: 34,
   },
 ];
 
-const MOCK_STATS = {
-  jogos: 24,
-  equipas: 16,
-  estadios: 8,
-};
+const MOCK_STATS = { jogos: 240, equipas: 16, estadios: 16 };
+
+const iniciaisEquipa = (nome) =>
+  nome
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+const formatarData = (dataStr) =>
+  new Date(dataStr).toLocaleDateString("pt-PT", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
 
 function JogoCard({ jogo, onClick }) {
-  const iniciaisEquipa = (nome) =>
-    nome
-      .split(" ")
-      .map((p) => p[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
-
-  const formatarData = (dataStr) =>
-    new Date(dataStr).toLocaleDateString("pt-PT", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-    });
-
   return (
     <Card sx={{ height: "100%", borderRadius: 3, boxShadow: 3 }}>
       <CardActionArea onClick={onClick} sx={{ height: "100%", p: 0 }}>
         <CardContent sx={{ p: 3, pb: "24px !important" }}>
           <Chip
-            label={jogo.fase}
+            label={`Jornada ${jogo.jornada}`}
             size="small"
             color="secondary"
             sx={{ mb: 2.5, fontWeight: 700 }}
@@ -96,6 +104,7 @@ function JogoCard({ jogo, onClick }) {
           >
             <Box sx={{ textAlign: "center", flex: 1, minWidth: 0 }}>
               <Avatar
+                src={jogo.logo_casa}
                 sx={{
                   bgcolor: "primary.main",
                   mx: "auto",
@@ -125,6 +134,7 @@ function JogoCard({ jogo, onClick }) {
 
             <Box sx={{ textAlign: "center", flex: 1, minWidth: 0 }}>
               <Avatar
+                src={jogo.logo_fora}
                 sx={{
                   bgcolor: "secondary.dark",
                   mx: "auto",
@@ -148,32 +158,19 @@ function JogoCard({ jogo, onClick }) {
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-              <CalendarMonthIcon
-                sx={{ fontSize: 16, color: "text.secondary" }}
-              />
-
+              <CalendarMonthIcon sx={{ fontSize: 16, color: "text.secondary" }} />
               <Typography variant="caption" color="text.secondary">
                 {formatarData(jogo.data)}
               </Typography>
 
-              <AccessTimeIcon
-                sx={{
-                  fontSize: 16,
-                  color: "text.secondary",
-                  ml: 1,
-                }}
-              />
-
+              <AccessTimeIcon sx={{ fontSize: 16, color: "text.secondary", ml: 1 }} />
               <Typography variant="caption" color="text.secondary">
                 {jogo.hora}
               </Typography>
             </Box>
 
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-              <LocationOnIcon
-                sx={{ fontSize: 16, color: "text.secondary" }}
-              />
-
+              <LocationOnIcon sx={{ fontSize: 16, color: "text.secondary" }} />
               <Typography variant="caption" color="text.secondary" noWrap>
                 {jogo.estadio}
               </Typography>
@@ -203,20 +200,11 @@ function StatCard({ icon, valor, label }) {
         {icon}
       </Box>
 
-      <Typography
-        variant="h4"
-        fontWeight={800}
-        color="white"
-        lineHeight={1}
-      >
+      <Typography variant="h4" fontWeight={800} color="white" lineHeight={1}>
         {valor}
       </Typography>
 
-      <Typography
-        variant="body2"
-        color="rgba(255,255,255,0.8)"
-        sx={{ mt: 0.6 }}
-      >
+      <Typography variant="body2" color="rgba(255,255,255,0.8)" sx={{ mt: 0.6 }}>
         {label}
       </Typography>
     </Box>
@@ -243,21 +231,47 @@ export default function Home() {
       <Box
         sx={{
           minHeight: { xs: "56vh", md: "58vh" },
-          backgroundImage: `linear-gradient(rgba(10,26,32,0.72), rgba(10,26,32,0.82)), url(${heroImg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          position: "relative",
+          overflow: "hidden",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
           px: 2,
           py: { xs: 5, md: 6 },
+
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            backgroundImage: `url(${heroImg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            filter: "blur(3px)",
+            transform: "scale(1.04)",
+            zIndex: 0,
+          },
+
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(rgba(5,15,20,0.55), rgba(5,15,20,0.7))",
+            zIndex: 1,
+          },
         }}
       >
-        <Container maxWidth="md">
+        <Container
+          maxWidth="md"
+          sx={{
+            position: "relative",
+            zIndex: 2,
+          }}
+        >
           <Chip
-            label="Campeonato Nacional 2025/26"
+            label="Divisão de Elite – AFC Coimbra 2025/26"
             sx={{
               bgcolor: "secondary.main",
               color: "black",
@@ -271,36 +285,34 @@ export default function Home() {
           <Typography
             variant="h2"
             component="h1"
-            color="white"
             fontWeight={900}
             sx={{
               mb: 2,
               lineHeight: 1.1,
-              fontSize: {
-                xs: "2.4rem",
-                sm: "3.2rem",
-                md: "4rem",
-              },
+              fontSize: { xs: "2.4rem", sm: "3.2rem", md: "4rem" },
+              textShadow: "0 3px 12px rgba(0,0,0,0.65)",
+              color: "#ffffff",
             }}
           >
-            Vive o Jogo.
+            Partilhamos Paixão.
             <br />
             Garante o Teu Lugar.
           </Typography>
 
           <Typography
             variant="h6"
-            color="rgba(255,255,255,0.78)"
             sx={{
               mb: 4,
-              maxWidth: 560,
+              maxWidth: 650,
               mx: "auto",
               fontWeight: 400,
               lineHeight: 1.6,
+              textShadow: "0 2px 8px rgba(0,0,0,0.65)",
+              color: "#ffffff",
             }}
           >
-            Os melhores jogos do campeonato numa única plataforma.
-            Compra o teu bilhete em segundos.
+            Os jogos da Divisão de Elite numa única plataforma. Compra o teu
+            bilhete em segundos.
           </Typography>
 
           <Box
@@ -316,12 +328,7 @@ export default function Home() {
               color="secondary"
               size="large"
               onClick={() => navigate("/jogos")}
-              sx={{
-                px: 4.5,
-                py: 1.4,
-                borderRadius: 2,
-                fontWeight: 700,
-              }}
+              sx={{ px: 4.5, py: 1.4, borderRadius: 2, fontWeight: 700 }}
             >
               Ver Jogos
             </Button>
@@ -334,7 +341,7 @@ export default function Home() {
                 py: 1.4,
                 borderRadius: 2,
                 color: "white",
-                borderColor: "rgba(255,255,255,0.55)",
+                borderColor: "rgba(255,255,255,0.75)",
                 fontWeight: 700,
                 "&:hover": {
                   borderColor: "white",
@@ -350,12 +357,7 @@ export default function Home() {
       </Box>
 
       {/* ESTATÍSTICAS */}
-      <Box
-        sx={{
-          bgcolor: "primary.main",
-          py: { xs: 3, md: 3.5 },
-        }}
-      >
+      <Box sx={{ bgcolor: "primary.main", py: { xs: 3, md: 3.5 } }}>
         <Container maxWidth="md">
           <Grid
             container
@@ -365,14 +367,7 @@ export default function Home() {
           >
             <Grid size={{ xs: 4 }}>
               <StatCard
-                icon={
-                  <SportsSoccerIcon
-                    sx={{
-                      color: "secondary.main",
-                      fontSize: 28,
-                    }}
-                  />
-                }
+                icon={<SportsSoccerIcon sx={{ color: "secondary.main", fontSize: 28 }} />}
                 valor={stats?.jogos ?? "—"}
                 label="Jogos"
               />
@@ -380,14 +375,7 @@ export default function Home() {
 
             <Grid size={{ xs: 4 }}>
               <StatCard
-                icon={
-                  <GroupsIcon
-                    sx={{
-                      color: "secondary.main",
-                      fontSize: 28,
-                    }}
-                  />
-                }
+                icon={<GroupsIcon sx={{ color: "secondary.main", fontSize: 28 }} />}
                 valor={stats?.equipas ?? "—"}
                 label="Equipas"
               />
@@ -395,14 +383,7 @@ export default function Home() {
 
             <Grid size={{ xs: 4 }}>
               <StatCard
-                icon={
-                  <StadiumIcon
-                    sx={{
-                      color: "secondary.main",
-                      fontSize: 28,
-                    }}
-                  />
-                }
+                icon={<StadiumIcon sx={{ color: "secondary.main", fontSize: 28 }} />}
                 valor={stats?.estadios ?? "—"}
                 label="Estádios"
               />
@@ -412,43 +393,24 @@ export default function Home() {
       </Box>
 
       {/* PRÓXIMOS JOGOS */}
-      <Box
-        sx={{
-          py: { xs: 6, md: 8 },
-          bgcolor: "background.default",
-        }}
-      >
+      <Box sx={{ py: { xs: 6, md: 8 }, bgcolor: "background.default" }}>
         <Container maxWidth="lg">
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              alignItems: {
-                xs: "flex-start",
-                sm: "center",
-              },
+              alignItems: { xs: "flex-start", sm: "center" },
               gap: 2,
               mb: 4,
-              flexDirection: {
-                xs: "column",
-                sm: "row",
-              },
+              flexDirection: { xs: "column", sm: "row" },
             }}
           >
             <Box>
-              <Typography
-                variant="overline"
-                color="secondary.dark"
-                fontWeight={800}
-              >
+              <Typography variant="overline" color="secondary.dark" fontWeight={800}>
                 Em destaque
               </Typography>
 
-              <Typography
-                variant="h4"
-                fontWeight={800}
-                color="primary.main"
-              >
+              <Typography variant="h4" fontWeight={800} color="primary.main">
                 Próximos Jogos
               </Typography>
             </Box>
@@ -457,10 +419,7 @@ export default function Home() {
               variant="outlined"
               color="primary"
               onClick={() => navigate("/jogos")}
-              sx={{
-                borderRadius: 2,
-                fontWeight: 700,
-              }}
+              sx={{ borderRadius: 2, fontWeight: 700 }}
             >
               Ver todos
             </Button>
@@ -469,10 +428,7 @@ export default function Home() {
           <Grid container spacing={3}>
             {loading
               ? Array.from({ length: 3 }).map((_, i) => (
-                  <Grid
-                    key={i}
-                    size={{ xs: 12, sm: 6, md: 4 }}
-                  >
+                  <Grid key={i} size={{ xs: 12, sm: 6, md: 4 }}>
                     <Skeleton
                       variant="rounded"
                       height={220}
@@ -481,15 +437,10 @@ export default function Home() {
                   </Grid>
                 ))
               : jogos.map((jogo) => (
-                  <Grid
-                    key={jogo.id}
-                    size={{ xs: 12, sm: 6, md: 4 }}
-                  >
+                  <Grid key={jogo.id} size={{ xs: 12, sm: 6, md: 4 }}>
                     <JogoCard
                       jogo={jogo}
-                      onClick={() =>
-                        navigate(`/jogos/${jogo.id}`)
-                      }
+                      onClick={() => navigate(`/jogos/${jogo.id}`)}
                     />
                   </Grid>
                 ))}

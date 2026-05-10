@@ -1,55 +1,48 @@
 import { useState, useEffect } from "react";
 import {
-  Box,
-  Container,
-  Typography,
-  Tabs,
-  Tab,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  TextField,
-  Grid,
-  Chip,
-  Snackbar,
-  Alert,
-  Skeleton,
-  Tooltip,
+  Box, Container, Typography, Tabs, Tab, Button, Table, TableBody,
+  TableCell, TableContainer, TableHead, TableRow, Paper, IconButton,
+  Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
+  TextField, Grid, Chip, Snackbar, Alert, Tooltip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
-// ─── Mock data – substituir por chamadas à API ─────────────────────────────────
-const MOCK_JOGOS = [
-  { id: 1, equipa_casa: "Sporting CP", equipa_fora: "FC Porto",  data: "2025-06-14", hora: "21:00", estadio: "Alvalade", fase: "Final" },
-  { id: 2, equipa_casa: "SL Benfica",  equipa_fora: "SC Braga",  data: "2025-06-07", hora: "18:30", estadio: "Estádio da Luz", fase: "Meia-Final" },
-];
+// ─────────────────────────────────────────────────────────────────────────────
+// MOCK DATA – edita aqui as equipas, estádios, jogos e compras
+// Campos das equipas: id, nome, fundacao (data ex: "1999-09-09")
+// Campos dos estádios: id, nome, morada, lotacao, preco_base
+// Campos dos jogos: id, equipa_casa, equipa_fora, data, hora, estadio, jornada
+// ─────────────────────────────────────────────────────────────────────────────
 const MOCK_EQUIPAS = [
-  { id: 1, nome: "Sporting CP", cidade: "Lisboa", fundacao: 1906 },
-  { id: 2, nome: "FC Porto",    cidade: "Porto",  fundacao: 1893 },
-  { id: 3, nome: "SL Benfica",  cidade: "Lisboa", fundacao: 1904 },
+  { id: 1, nome: "Vigor da Mocidade", fundacao: "1999-09-09" },
+  { id: 2, nome: "AD Oliveirense",    fundacao: "1925-03-15" },
+  { id: 3, nome: "Sertanense FC",     fundacao: "1921-06-01" },
+  { id: 4, nome: "Marinhense SC",     fundacao: "1945-01-01" },
+  { id: 5, nome: "CD Eiras",          fundacao: "1955-05-10" },
+  { id: 6, nome: "AFC Coimbra",       fundacao: "2014-07-01" },
 ];
+
 const MOCK_ESTADIOS = [
-  { id: 1, nome: "Estádio de Alvalade", cidade: "Lisboa", capacidade: 50000 },
-  { id: 2, nome: "Estádio do Dragão",   cidade: "Porto",  capacidade: 50033 },
-  { id: 3, nome: "Estádio da Luz",      cidade: "Lisboa", capacidade: 64642 },
+  { id: 1, nome: "Campo dos Sardões",                     morada: "Rua dos Sardões, Coimbra",              lotacao: 2000, preco_base: 4.50 },
+  { id: 2, nome: "Campo Municipal de Oliveira do Hospital", morada: "Av. do Estádio, Oliveira do Hospital", lotacao: 1500, preco_base: 3.50 },
+  { id: 3, nome: "Estádio Municipal de Sertã",            morada: "Rua do Estádio, Sertã",                 lotacao: 800,  preco_base: 3.00 },
+  { id: 4, nome: "Campo do Marinhense",                   morada: "Rua Principal, Figueira da Foz",        lotacao: 600,  preco_base: 3.00 },
+  { id: 5, nome: "Campo de Eiras",                        morada: "Rua de Eiras, Coimbra",                 lotacao: 500,  preco_base: 2.50 },
 ];
+
+const MOCK_JOGOS = [
+  { id: 1, equipa_casa: "Vigor da Mocidade", equipa_fora: "AD Oliveirense", data: "2025-06-14", hora: "21:00", estadio: "Campo dos Sardões",                      jornada: 34 },
+  { id: 2, equipa_casa: "Sertanense FC",     equipa_fora: "CD Eiras",       data: "2025-06-14", hora: "17:00", estadio: "Estádio Municipal de Sertã",             jornada: 34 },
+  { id: 3, equipa_casa: "Marinhense SC",     equipa_fora: "AFC Coimbra",    data: "2025-06-14", hora: "18:30", estadio: "Campo do Marinhense",                    jornada: 34 },
+  { id: 4, equipa_casa: "Vigor da Mocidade", equipa_fora: "Marinhense SC",  data: "2025-06-07", hora: "21:00", estadio: "Campo dos Sardões",                      jornada: 33 },
+];
+
 const MOCK_COMPRAS = [
-  { id: 101, cliente: "ana@email.com", jogo: "Sporting vs Porto", categoria: "Geral",    qtd: 2, total: "30.00€", data: "2025-05-01" },
-  { id: 102, cliente: "joao@email.com", jogo: "Benfica vs Braga", categoria: "Tribuna", qtd: 1, total: "55.00€", data: "2025-05-03" },
+  { id: 101, cliente: "ana@email.com",  jogo: "Vigor vs Oliveirense", qtd: 2, total: "9.00€",  estado: "pago",      data: "2025-05-01" },
+  { id: 102, cliente: "joao@email.com", jogo: "Sertanense vs Eiras",  qtd: 1, total: "3.00€",  estado: "por pagar", data: "2025-05-03" },
 ];
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -57,20 +50,11 @@ function TabPanel({ children, value, index }) {
   return value === index ? <Box sx={{ pt: 3 }}>{children}</Box> : null;
 }
 
-// ─── Formulário genérico ──────────────────────────────────────────────────────
 function FormDialog({ aberto, onFechar, titulo, campos, valores, onGuardar }) {
   const [form, setForm] = useState(valores || {});
-
-  useEffect(() => {
-    setForm(valores || {});
-  }, [valores, aberto]);
-
+  useEffect(() => { setForm(valores || {}); }, [valores, aberto]);
   const handleChange = (campo, valor) => setForm((f) => ({ ...f, [campo]: valor }));
-
-  const handleSubmit = () => {
-    onGuardar(form);
-    onFechar();
-  };
+  const handleSubmit = () => { onGuardar(form); onFechar(); };
 
   return (
     <Dialog open={aberto} onClose={onFechar} maxWidth="sm" fullWidth>
@@ -80,9 +64,7 @@ function FormDialog({ aberto, onFechar, titulo, campos, valores, onGuardar }) {
           {campos.map((campo) => (
             <Grid key={campo.key} size={{ xs: 12, sm: campo.fullWidth ? 12 : 6 }}>
               <TextField
-                fullWidth
-                label={campo.label}
-                type={campo.type || "text"}
+                fullWidth label={campo.label} type={campo.type || "text"}
                 value={form[campo.key] || ""}
                 onChange={(e) => handleChange(campo.key, e.target.value)}
                 size="small"
@@ -99,7 +81,6 @@ function FormDialog({ aberto, onFechar, titulo, campos, valores, onGuardar }) {
   );
 }
 
-// ─── Dialog de confirmação de apagar ─────────────────────────────────────────
 function DialogApagar({ aberto, onFechar, onConfirmar, descricao }) {
   return (
     <Dialog open={aberto} onClose={onFechar} maxWidth="xs" fullWidth>
@@ -117,35 +98,32 @@ function DialogApagar({ aberto, onFechar, onConfirmar, descricao }) {
   );
 }
 
-// ─── Aba: Jogos ───────────────────────────────────────────────────────────────
+// ── Aba Jogos ────────────────────────────────────────────────────────────────
 function AbaJogos({ setSnackbar }) {
   const [jogos, setJogos] = useState(MOCK_JOGOS);
   const [dialogForm, setDialogForm] = useState({ aberto: false, valores: null });
   const [dialogApagar, setDialogApagar] = useState({ aberto: false, item: null });
 
   const campos = [
-    { key: "equipa_casa", label: "Equipa Casa" },
-    { key: "equipa_fora", label: "Equipa Fora" },
-    { key: "data", label: "Data", type: "date" },
-    { key: "hora", label: "Hora", type: "time" },
-    { key: "estadio", label: "Estádio" },
-    { key: "fase", label: "Fase" },
+    { key: "equipa_casa",  label: "Equipa Casa" },
+    { key: "equipa_fora",  label: "Equipa Fora" },
+    { key: "data",         label: "Data",    type: "date" },
+    { key: "hora",         label: "Hora",    type: "time" },
+    { key: "estadio",      label: "Estádio", fullWidth: true },
+    { key: "jornada",      label: "Jornada", type: "number" },
   ];
 
   const handleGuardar = (form) => {
-    if (form.id) {
-      setJogos((prev) => prev.map((j) => (j.id === form.id ? form : j)));
-      // TODO: axios.put(`http://localhost:5000/api/v1/jogos/${form.id}`, form)
-    } else {
-      setJogos((prev) => [...prev, { ...form, id: Date.now() }]);
-      // TODO: axios.post("http://localhost:5000/api/v1/jogos", form)
-    }
-    setSnackbar({ aberto: true, msg: "Jogo guardado com sucesso!", tipo: "success" });
+    const jornada = Number(form.jornada);
+    if (form.id) setJogos((p) => p.map((j) => j.id === form.id ? { ...form, jornada } : j));
+    else setJogos((p) => [...p, { ...form, jornada, id: Date.now() }]);
+    // TODO: axios.post/put http://localhost:5000/api/v3/jogo
+    setSnackbar({ aberto: true, msg: "Jogo guardado!", tipo: "success" });
   };
 
   const handleApagar = () => {
-    setJogos((prev) => prev.filter((j) => j.id !== dialogApagar.item.id));
-    // TODO: axios.delete(`http://localhost:5000/api/v1/jogos/${dialogApagar.item.id}`)
+    setJogos((p) => p.filter((j) => j.id !== dialogApagar.item.id));
+    // TODO: axios.delete(`http://localhost:5000/api/v3/jogo/${dialogApagar.item.id}`)
     setDialogApagar({ aberto: false, item: null });
     setSnackbar({ aberto: true, msg: "Jogo eliminado.", tipo: "info" });
   };
@@ -161,7 +139,7 @@ function AbaJogos({ setSnackbar }) {
         <Table size="small">
           <TableHead>
             <TableRow sx={{ bgcolor: "primary.main" }}>
-              {["ID", "Casa", "Fora", "Data", "Hora", "Fase", ""].map((h) => (
+              {["ID", "Casa", "Fora", "Data", "Hora", "Estádio", "Jornada", ""].map((h) => (
                 <TableCell key={h} sx={{ color: "white", fontWeight: 600 }}>{h}</TableCell>
               ))}
             </TableRow>
@@ -174,18 +152,11 @@ function AbaJogos({ setSnackbar }) {
                 <TableCell>{j.equipa_fora}</TableCell>
                 <TableCell>{j.data}</TableCell>
                 <TableCell>{j.hora}</TableCell>
-                <TableCell><Chip label={j.fase} size="small" color="secondary" /></TableCell>
+                <TableCell>{j.estadio}</TableCell>
+                <TableCell><Chip label={`J${j.jornada}`} size="small" color="secondary" /></TableCell>
                 <TableCell align="right">
-                  <Tooltip title="Editar">
-                    <IconButton size="small" color="primary" onClick={() => setDialogForm({ aberto: true, valores: j })}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Eliminar">
-                    <IconButton size="small" color="error" onClick={() => setDialogApagar({ aberto: true, item: j })}>
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
+                  <Tooltip title="Editar"><IconButton size="small" color="primary" onClick={() => setDialogForm({ aberto: true, valores: j })}><EditIcon fontSize="small" /></IconButton></Tooltip>
+                  <Tooltip title="Eliminar"><IconButton size="small" color="error" onClick={() => setDialogApagar({ aberto: true, item: j })}><DeleteIcon fontSize="small" /></IconButton></Tooltip>
                 </TableCell>
               </TableRow>
             ))}
@@ -198,29 +169,26 @@ function AbaJogos({ setSnackbar }) {
   );
 }
 
-// ─── Aba: Equipas ────────────────────────────────────────────────────────────
+// ── Aba Equipas ──────────────────────────────────────────────────────────────
 function AbaEquipas({ setSnackbar }) {
   const [equipas, setEquipas] = useState(MOCK_EQUIPAS);
   const [dialogForm, setDialogForm] = useState({ aberto: false, valores: null });
   const [dialogApagar, setDialogApagar] = useState({ aberto: false, item: null });
 
   const campos = [
-    { key: "nome", label: "Nome", fullWidth: true },
-    { key: "cidade", label: "Cidade" },
-    { key: "fundacao", label: "Ano de Fundação", type: "number" },
+    { key: "nome",     label: "Nome",              fullWidth: true },
+    { key: "fundacao", label: "Data de Fundação",  type: "date" },
   ];
 
   const handleGuardar = (form) => {
-    if (form.id) {
-      setEquipas((prev) => prev.map((e) => (e.id === form.id ? form : e)));
-    } else {
-      setEquipas((prev) => [...prev, { ...form, id: Date.now() }]);
-    }
+    if (form.id) setEquipas((p) => p.map((e) => e.id === form.id ? form : e));
+    else setEquipas((p) => [...p, { ...form, id: Date.now() }]);
+    // TODO: axios.post/put http://localhost:5000/api/v3/equipa
     setSnackbar({ aberto: true, msg: "Equipa guardada!", tipo: "success" });
   };
 
   const handleApagar = () => {
-    setEquipas((prev) => prev.filter((e) => e.id !== dialogApagar.item.id));
+    setEquipas((p) => p.filter((e) => e.id !== dialogApagar.item.id));
     setDialogApagar({ aberto: false, item: null });
     setSnackbar({ aberto: true, msg: "Equipa eliminada.", tipo: "info" });
   };
@@ -236,7 +204,7 @@ function AbaEquipas({ setSnackbar }) {
         <Table size="small">
           <TableHead>
             <TableRow sx={{ bgcolor: "primary.main" }}>
-              {["ID", "Nome", "Cidade", "Fundação", ""].map((h) => (
+              {["ID", "Nome", "Fundação", ""].map((h) => (
                 <TableCell key={h} sx={{ color: "white", fontWeight: 600 }}>{h}</TableCell>
               ))}
             </TableRow>
@@ -246,19 +214,10 @@ function AbaEquipas({ setSnackbar }) {
               <TableRow key={e.id} hover>
                 <TableCell>{e.id}</TableCell>
                 <TableCell fontWeight={600}>{e.nome}</TableCell>
-                <TableCell>{e.cidade}</TableCell>
                 <TableCell>{e.fundacao}</TableCell>
                 <TableCell align="right">
-                  <Tooltip title="Editar">
-                    <IconButton size="small" color="primary" onClick={() => setDialogForm({ aberto: true, valores: e })}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Eliminar">
-                    <IconButton size="small" color="error" onClick={() => setDialogApagar({ aberto: true, item: e })}>
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
+                  <Tooltip title="Editar"><IconButton size="small" color="primary" onClick={() => setDialogForm({ aberto: true, valores: e })}><EditIcon fontSize="small" /></IconButton></Tooltip>
+                  <Tooltip title="Eliminar"><IconButton size="small" color="error" onClick={() => setDialogApagar({ aberto: true, item: e })}><DeleteIcon fontSize="small" /></IconButton></Tooltip>
                 </TableCell>
               </TableRow>
             ))}
@@ -271,29 +230,29 @@ function AbaEquipas({ setSnackbar }) {
   );
 }
 
-// ─── Aba: Estádios ────────────────────────────────────────────────────────────
+// ── Aba Estádios ─────────────────────────────────────────────────────────────
 function AbaEstadios({ setSnackbar }) {
   const [estadios, setEstadios] = useState(MOCK_ESTADIOS);
   const [dialogForm, setDialogForm] = useState({ aberto: false, valores: null });
   const [dialogApagar, setDialogApagar] = useState({ aberto: false, item: null });
 
   const campos = [
-    { key: "nome", label: "Nome", fullWidth: true },
-    { key: "cidade", label: "Cidade" },
-    { key: "capacidade", label: "Capacidade", type: "number" },
+    { key: "nome",       label: "Nome",        fullWidth: true },
+    { key: "morada",     label: "Morada",      fullWidth: true },
+    { key: "lotacao",    label: "Lotação",     type: "number" },
+    { key: "preco_base", label: "Preço Base (€)", type: "number" },
   ];
 
   const handleGuardar = (form) => {
-    if (form.id) {
-      setEstadios((prev) => prev.map((e) => (e.id === form.id ? form : e)));
-    } else {
-      setEstadios((prev) => [...prev, { ...form, id: Date.now() }]);
-    }
+    const dados = { ...form, lotacao: Number(form.lotacao), preco_base: Number(form.preco_base) };
+    if (form.id) setEstadios((p) => p.map((e) => e.id === form.id ? dados : e));
+    else setEstadios((p) => [...p, { ...dados, id: Date.now() }]);
+    // TODO: axios.post/put http://localhost:5000/api/v3/estadio
     setSnackbar({ aberto: true, msg: "Estádio guardado!", tipo: "success" });
   };
 
   const handleApagar = () => {
-    setEstadios((prev) => prev.filter((e) => e.id !== dialogApagar.item.id));
+    setEstadios((p) => p.filter((e) => e.id !== dialogApagar.item.id));
     setDialogApagar({ aberto: false, item: null });
     setSnackbar({ aberto: true, msg: "Estádio eliminado.", tipo: "info" });
   };
@@ -309,7 +268,7 @@ function AbaEstadios({ setSnackbar }) {
         <Table size="small">
           <TableHead>
             <TableRow sx={{ bgcolor: "primary.main" }}>
-              {["ID", "Nome", "Cidade", "Capacidade", ""].map((h) => (
+              {["ID", "Nome", "Morada", "Lotação", "Preço Base", ""].map((h) => (
                 <TableCell key={h} sx={{ color: "white", fontWeight: 600 }}>{h}</TableCell>
               ))}
             </TableRow>
@@ -319,19 +278,12 @@ function AbaEstadios({ setSnackbar }) {
               <TableRow key={e.id} hover>
                 <TableCell>{e.id}</TableCell>
                 <TableCell>{e.nome}</TableCell>
-                <TableCell>{e.cidade}</TableCell>
-                <TableCell>{Number(e.capacidade).toLocaleString("pt-PT")}</TableCell>
+                <TableCell>{e.morada}</TableCell>
+                <TableCell>{Number(e.lotacao).toLocaleString("pt-PT")}</TableCell>
+                <TableCell>{Number(e.preco_base).toFixed(2)}€</TableCell>
                 <TableCell align="right">
-                  <Tooltip title="Editar">
-                    <IconButton size="small" color="primary" onClick={() => setDialogForm({ aberto: true, valores: e })}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Eliminar">
-                    <IconButton size="small" color="error" onClick={() => setDialogApagar({ aberto: true, item: e })}>
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
+                  <Tooltip title="Editar"><IconButton size="small" color="primary" onClick={() => setDialogForm({ aberto: true, valores: e })}><EditIcon fontSize="small" /></IconButton></Tooltip>
+                  <Tooltip title="Eliminar"><IconButton size="small" color="error" onClick={() => setDialogApagar({ aberto: true, item: e })}><DeleteIcon fontSize="small" /></IconButton></Tooltip>
                 </TableCell>
               </TableRow>
             ))}
@@ -344,14 +296,17 @@ function AbaEstadios({ setSnackbar }) {
   );
 }
 
-// ─── Aba: Compras (só leitura) ────────────────────────────────────────────────
+// ── Aba Compras ──────────────────────────────────────────────────────────────
 function AbaCompras() {
+  const estadoColor = (estado) =>
+    estado === "pago" ? "success" : estado === "cancelado" ? "error" : "warning";
+
   return (
     <TableContainer component={Paper} sx={{ borderRadius: 3 }}>
       <Table size="small">
         <TableHead>
           <TableRow sx={{ bgcolor: "primary.main" }}>
-            {["ID", "Cliente", "Jogo", "Categoria", "Qtd", "Total", "Data"].map((h) => (
+            {["ID", "Cliente", "Jogo", "Qtd", "Total", "Estado", "Data"].map((h) => (
               <TableCell key={h} sx={{ color: "white", fontWeight: 600 }}>{h}</TableCell>
             ))}
           </TableRow>
@@ -362,9 +317,9 @@ function AbaCompras() {
               <TableCell>#{c.id}</TableCell>
               <TableCell>{c.cliente}</TableCell>
               <TableCell>{c.jogo}</TableCell>
-              <TableCell>{c.categoria}</TableCell>
               <TableCell>{c.qtd}</TableCell>
               <TableCell><strong>{c.total}</strong></TableCell>
+              <TableCell><Chip label={c.estado} size="small" color={estadoColor(c.estado)} /></TableCell>
               <TableCell>{c.data}</TableCell>
             </TableRow>
           ))}
@@ -374,7 +329,7 @@ function AbaCompras() {
   );
 }
 
-// ─── Componente principal Admin ───────────────────────────────────────────────
+// ── Componente principal ─────────────────────────────────────────────────────
 export default function Admin() {
   const [tab, setTab] = useState(0);
   const [snackbar, setSnackbar] = useState({ aberto: false, msg: "", tipo: "success" });
@@ -383,24 +338,15 @@ export default function Admin() {
     <Box sx={{ py: 5, bgcolor: "background.default", minHeight: "calc(100vh - 80px)" }}>
       <Container maxWidth="xl">
         <Box sx={{ mb: 4 }}>
-          <Typography variant="overline" color="secondary.dark" fontWeight={700}>
-            Área restrita
-          </Typography>
-          <Typography variant="h4" fontWeight={700} color="primary.main">
-            Painel de Administração
-          </Typography>
+          <Typography variant="overline" color="secondary.dark" fontWeight={700}>Área restrita</Typography>
+          <Typography variant="h4" fontWeight={700} color="primary.main">Painel de Administração</Typography>
         </Box>
 
         <Paper sx={{ borderRadius: 3 }}>
           <Tabs
             value={tab}
             onChange={(_, v) => setTab(v)}
-            sx={{
-              borderBottom: 1,
-              borderColor: "divider",
-              px: 2,
-              "& .MuiTab-root": { textTransform: "none", fontWeight: 600 },
-            }}
+            sx={{ borderBottom: 1, borderColor: "divider", px: 2, "& .MuiTab-root": { textTransform: "none", fontWeight: 600 } }}
           >
             <Tab label="Jogos" />
             <Tab label="Equipas" />
@@ -417,14 +363,11 @@ export default function Admin() {
       </Container>
 
       <Snackbar
-        open={snackbar.aberto}
-        autoHideDuration={3500}
+        open={snackbar.aberto} autoHideDuration={3500}
         onClose={() => setSnackbar((s) => ({ ...s, aberto: false }))}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert severity={snackbar.tipo} variant="filled" sx={{ width: "100%" }}>
-          {snackbar.msg}
-        </Alert>
+        <Alert severity={snackbar.tipo} variant="filled" sx={{ width: "100%" }}>{snackbar.msg}</Alert>
       </Snackbar>
     </Box>
   );

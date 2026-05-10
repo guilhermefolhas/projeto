@@ -9,6 +9,7 @@ import {
   Link,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import logoAFC from "../../assets/afc_logo_preto.png";
 
 const LoginUI = () => {
   return (
@@ -19,6 +20,7 @@ const LoginUI = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        bgcolor: "#f5f5f5",
       }}
     >
       <Paper
@@ -27,13 +29,46 @@ const LoginUI = () => {
           p: 4,
           width: "100%",
           textAlign: "center",
+          borderRadius: 2,
         }}
       >
-        <Typography variant="h4" gutterBottom>
-          Entrar na Área de Cliente
+        {/* Logo */}
+        <Box
+          component="img"
+          src={logoAFC}
+          alt="Bilheteira AFC"
+          sx={{
+            width: 110,
+            height: 110,
+            objectFit: "contain",
+            mb: 2,
+            mx: "auto",
+            display: "block",
+          }}
+        />
+
+        {/* Título principal */}
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 700,
+            mb: 0.5,
+          }}
+        >
+          Bilheteira AFC
         </Typography>
 
-        <Box component="form" sx={{ mt: 2 }}>
+        {/* Subtítulo */}
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ mb: 3 }}
+        >
+          Área de Cliente
+        </Typography>
+
+        {/* Formulário */}
+        <Box component="form">
           <TextField
             fullWidth
             label="Email"
@@ -56,7 +91,13 @@ const LoginUI = () => {
             fullWidth
             variant="contained"
             type="submit"
-            sx={{ mt: 2, mb: 2 }}
+            sx={{
+              mt: 2,
+              mb: 2,
+              py: 1.4,
+              fontWeight: 700,
+              fontSize: "1rem",
+            }}
           >
             ENTRAR
           </Button>
